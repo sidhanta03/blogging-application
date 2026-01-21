@@ -19,43 +19,17 @@ const EditBlog = () => {
     const categories = ["Technology", "Lifestyle", "Career", "Finance", "Travel", "Food", "Other"];
 
     useEffect(() => {
-        // If passed via state (from MyBlogs), use it
         if (location.state?.blog) {
             const { title, category, content, image } = location.state.blog;
             setFormData({ title, category, content, image: image || '' });
         } else {
-            // Otherwise fetch it (in case of direct link access)
-            // Since we don't have a single blog fetch endpoint in requirements (only get all), 
-            // we might have to filter from all blogs or implementation details might vary.
-            // But typically a GET /blogs/:id is standard.
-            // Wait, requirements said:
-            // "GET /blogs - Retrieve all blogs"
-            // "GET /blogs?category=...&author=..."
-            // It DID NOT explicitly list GET /blogs/:id.
-            // However, usually detailed view or edit needs it.
-            // If backend doesn't have it, I might have to fetch all and find. 
-            // But I implemented the backend and I recall...
-            // Let me check my backend implementation in `blogController.js`.
-            // I implemented `getBlogs`, `createBlog`, `updateBlog`, `deleteBlog`.
-            // I did NOT implement `getBlogById`.
-            // This is a missing feature in my backend implementation vs standard needs, but per strictly requirements it wasn't asked.
-            // BUT, for `Edit Blog Page`, we need to load data.
-            // If the user navigates from "My Blogs", we have the data in state.
-            // If they refresh, we lose it.
-            // I should probably add `getBlogById` to backend or just fetch all and filter client side as a fallback since list is likely small for this assignment.
-            // Or I can add `getBlogById` to backend now. It's safer.
-            // But I should stick to what `MyBlogs` provides via state for now to be quick, or fetch all.
-
-            // Let's rely on state or specific fetch if I can add it?
-            // "GET /blogs - Retrieve all blogs" is what I have.
-            // I will fetch all and find the one matching ID if state is missing.
             fetchBlog();
         }
     }, [id, location.state]);
 
     const fetchBlog = async () => {
         try {
-            // Fallback: fetch all and find.
+            // fetch all and find.
             const { data } = await API.get('/blogs');
             const blog = data.find(b => b._id === id);
             if (blog) {

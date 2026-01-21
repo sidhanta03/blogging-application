@@ -13,18 +13,8 @@ const MyBlogs = () => {
 
     const fetchUserBlogs = async () => {
         try {
-            // Assuming the backend has a way to filter by author name or we might need a dedicated endpoint
-            // Requirements said: GET /blogs?category=:category&author=:author
-            // Since 'author' in blog is a string name (per requirements), we filter by user.name
-            // Ideally should filter by ID but we followed requirements.
             if (user?.name) {
                 const { data } = await API.get(`/blogs?author=${user.name}`);
-                // Client side filter to be sure (since name might not be unique if not enforced, but ID is check in delete/update)
-                // Actually the backend endpoint for delete/update checks userId, so we are safe on security.
-                // For display, name filter is what's available.
-                // Better yet, let's just fetch all and filter by userId on client if backend only supports author name string filter
-                // Wait, the backend /blogs endpoint returns all blogs filtered by author name.
-                // Let's rely on that.
                 setBlogs(data);
             }
         } catch (error) {
