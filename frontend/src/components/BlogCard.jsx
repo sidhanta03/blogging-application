@@ -4,18 +4,25 @@ import { motion } from 'framer-motion';
 const BlogCard = ({ blog, isOwner, onDelete, onEdit }) => {
     const navigate = useNavigate();
 
+    const handleCardClick = (e) => {
+        // Prevent navigation if clicking on action buttons
+        if (e.target.closest('button')) return;
+        navigate(`/blog/${blog._id}`);
+    };
+
     return (
         <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-slate-200 dark:border-slate-800 transition-all duration-300 flex flex-col h-full"
+            className="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-slate-200 dark:border-slate-800 transition-all duration-300 flex flex-col h-full cursor-pointer group"
+            onClick={handleCardClick}
         >
             {blog.image && (
                 <div className="h-48 overflow-hidden">
                     <img
                         src={blog.image}
                         alt={blog.title}
-                        className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
+                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                     />
                 </div>
             )}
@@ -30,11 +37,11 @@ const BlogCard = ({ blog, isOwner, onDelete, onEdit }) => {
                     </span>
                 </div>
 
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 line-clamp-2">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                     {blog.title}
                 </h3>
 
-                <p className="text-slate-600 dark:text-slate-400 mb-6 line-clamp-3 flax-1">
+                <p className="text-slate-600 dark:text-slate-400 mb-6 line-clamp-3">
                     {blog.content}
                 </p>
 
@@ -51,8 +58,8 @@ const BlogCard = ({ blog, isOwner, onDelete, onEdit }) => {
                     {isOwner && (
                         <div className="flex gap-2">
                             <button
-                                onClick={() => onEdit(blog)}
-                                className="p-2 text-slate-400 hover:text-blue-600 transition-colors"
+                                onClick={(e) => { e.stopPropagation(); onEdit(blog); }}
+                                className="p-2 text-slate-400 hover:text-blue-600 transition-colors z-10"
                                 title="Edit"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -60,8 +67,8 @@ const BlogCard = ({ blog, isOwner, onDelete, onEdit }) => {
                                 </svg>
                             </button>
                             <button
-                                onClick={() => onDelete(blog._id)}
-                                className="p-2 text-slate-400 hover:text-red-600 transition-colors"
+                                onClick={(e) => { e.stopPropagation(); onDelete(blog._id); }}
+                                className="p-2 text-slate-400 hover:text-red-600 transition-colors z-10"
                                 title="Delete"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

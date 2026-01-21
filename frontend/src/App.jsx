@@ -8,6 +8,7 @@ import Signup from './pages/Signup';
 import CreateBlog from './pages/CreateBlog';
 import MyBlogs from './pages/MyBlogs';
 import EditBlog from './pages/EditBlog';
+import BlogDetails from './pages/BlogDetails';
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
@@ -51,6 +52,12 @@ function App() {
         <Route path="edit/:id" element={
           <PrivateRoute>
             <EditBlog />
+          </PrivateRoute>
+        } />
+
+        <Route path="blog/:id" element={
+          <PrivateRoute>
+            <BlogDetails />
           </PrivateRoute>
         } />
       </Route>
